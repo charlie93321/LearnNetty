@@ -20,7 +20,7 @@ public class JdkBioServer {
     public static void main(String[] args) {
 
 
-        try (ServerSocket serverSocket = new ServerSocket(22222)) {
+        try (ServerSocket serverSocket = new ServerSocket(5500)) {
             System.out.println("启动服务器,服务开始......");
 
             try {
