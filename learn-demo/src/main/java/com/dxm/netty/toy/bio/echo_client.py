@@ -2,16 +2,16 @@ import socket
 import sys
 
 line_seperator_dic={
-        'linux':'\n'.encode("utf-8"),
-        'win32':'\r\n'.encode("utf-8")
-    }
+    'linux':'\n'.encode("utf-8"),
+    'win32':'\r\n'.encode("utf-8")
+}
 
 def line_seperator():
     return line_seperator_dic[sys.platform]
 
-
 def start_client():
-    ip_port = ('127.0.0.1', 22222)
+    print(line_seperator_dic)
+    ip_port = ('124.70.208.68', 5500)
 
     sk = socket.socket()
 
@@ -23,7 +23,7 @@ def start_client():
             print("客户端退出......")
             break
         sk.send(str.encode("utf-8"))
-        sk.send(line_seperator().encode("utf-8"))
+        sk.send(line_seperator())
         server_reply = sk.recv(1024)
         print("客户端接收到的数据:{}".format(server_reply.decode(encoding='utf-8')))
 

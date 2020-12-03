@@ -20,7 +20,7 @@ public class JdkBioServer {
     public static void main(String[] args) {
 
 
-        try (ServerSocket serverSocket = new ServerSocket(5500)) {
+        try (ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[0]))) {
             System.out.println("启动服务器,服务开始......");
 
             try {
@@ -43,11 +43,13 @@ public class JdkBioServer {
 
         while (true) {
             Socket socket = serverSocket.accept();
+            String threadName = Thread.currentThread().getName();
+            String address = socket.getInetAddress().getHostAddress();
+            System.out.println(String.format("服务器线程%s,正在处理客户端:%s的请求.",threadName,address));
             try (
-                    PrintWriter out = new PrintWriter(socket.getOutputStream());
+                    PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             ) {
-
 
                 while (true) {
                     String read = in.readLine();
@@ -55,11 +57,9 @@ public class JdkBioServer {
 
                     if (read.equals("quit")) break;
 
-
-
                     String msg = read + ",服务器处理线程:" + Thread.currentThread().getName();
-                    out.println(msg + "\n");
-                    out.flush();
+                    out.println(msg);
+
                     System.out.println(
                             String.format("发送给客户端的数据:%s,时间为:%s", msg, CommonUtil.getNowTime())
                     );
