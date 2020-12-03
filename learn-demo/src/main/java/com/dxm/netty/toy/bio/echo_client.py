@@ -1,17 +1,19 @@
 import socket
 import sys
 
-line_seperator_dic={
-    'linux':'\n'.encode("utf-8"),
-    'win32':'\r\n'.encode("utf-8")
+line_seperator_dic = {
+    'linux': '\n'.encode("utf-8"),
+    'win32': '\r\n'.encode("utf-8")
 }
+
 
 def line_seperator():
     return line_seperator_dic[sys.platform]
 
+
 def start_client():
     print(line_seperator_dic)
-    ip_port = ('124.70.208.68', 5500)
+    ip_port = ('localhost', 5500)
 
     sk = socket.socket()
 

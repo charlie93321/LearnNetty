@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class JdkBioClient {
     public static void main(String[] args) {
         //Scanner scanner = new Scanner(System.in);
-        try(Socket socket = new Socket("localhost",22222)){
+        try(Socket socket = new Socket("localhost",5500)){
             System.out.println("启动客户端,通信开始......");
 
 
