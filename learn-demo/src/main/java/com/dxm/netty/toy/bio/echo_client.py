@@ -20,6 +20,8 @@ def start_client():
     while True:
         str = input("Enter your input: ")
         if "quit" == str:
+            sk.send(str.encode("utf-8"))
+            sk.send(line_seperator())
             print("客户端退出......")
             break
         sk.send(str.encode("utf-8"))
