@@ -10,6 +10,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+/***
+ * 单线程阻塞SOCKET服务
+ * 可以单线程处理用户的服务
+ */
 public class JdkBioServer {
 
 
@@ -44,13 +48,16 @@ public class JdkBioServer {
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             ) {
 
+
                 while (true) {
                     String read = in.readLine();
                     System.out.println(String.format("从客户端获取到的数据:%s,时间为:%s", read, CommonUtil.getNowTime()));
 
                     if (read.equals("quit")) break;
 
-                    String msg = read + ",\n服务器处理线程:" + Thread.currentThread().getName();
+
+
+                    String msg = read + ",服务器处理线程:" + Thread.currentThread().getName();
                     out.println(msg + "\n");
                     out.flush();
                     System.out.println(
