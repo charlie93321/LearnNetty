@@ -55,7 +55,10 @@ public class JdkBioServer {
                     String read = in.readLine();
                     System.out.println(String.format("从客户端获取到的数据:%s,时间为:%s", read, CommonUtil.getNowTime()));
 
-                    if (read.equals("quit")) break;
+                    if (read.equals("quit")) {
+                        System.out.println(String.format("客户端:%s退出,时间为:%s", address, CommonUtil.getNowTime()));
+                        break;
+                    }
 
                     String msg = read + ",服务器处理线程:" + Thread.currentThread().getName();
                     out.println(msg);
