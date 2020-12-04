@@ -56,7 +56,7 @@
               <manifest>
                 <addClasspath>true</addClasspath>
                 <!-- 此处为程序主入口-->
-                <mainClass>com.dxm.netty.toy.bio.JdkBioServer</mainClass>
+                <mainClass>com.dxm.netty.toy.bio.MutiThreadServer</mainClass>
               </manifest>
             </archive>
           </configuration>
