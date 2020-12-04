@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 多线程socket服务器
@@ -62,6 +63,7 @@ public class MutiThreadServer {
          */
         ArrayBlockingQueue waitQueue  = new ArrayBlockingQueue(5);
         ExecutorService executorService = new ThreadPoolExecutor(10,15,60, TimeUnit.SECONDS,waitQueue);
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
         while (true) {
             Socket socket = serverSocket.accept();
             Thread task = new Thread(() -> {
@@ -80,6 +82,11 @@ public class MutiThreadServer {
                         if (read.equals("quit")) {
                             System.out.println(String.format("客户端:%s退出,时间为:%s", address, CommonUtil.getNowTime()));
                             break;
+                        }else if(read.equals("server shut down")){
+                            System.out.println(String.format("客户端:%s退出,时间为:%s", address, CommonUtil.getNowTime()));
+                            System.out.println(String.format("服务器关机,时间为:%s", address, CommonUtil.getNowTime()));
+                            atomicBoolean.set(true);
+                            break;
                         }
 
                         String msg = read + ",服务器处理线程:" + Thread.currentThread().getName();
@@ -95,10 +102,12 @@ public class MutiThreadServer {
                     e.printStackTrace();
                 }
             }, "工作线程" + i++);
-
             executorService.submit(task);
+            if(atomicBoolean.get()){
+                break;
+            }
 
         }
-
+        executorService.shutdown();
     }
 }
