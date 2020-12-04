@@ -8,8 +8,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 多线程socket服务器
@@ -39,7 +42,26 @@ public class MutiThreadServer {
 
     private static void doRequest(ServerSocket serverSocket) throws IOException {
          int i=1;
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        /**
+         * int corePoolSize,                 核心队列
+         * int maximumPoolSize,              最大队列
+         * long keepAliveTime,               保活时间  when the number of threads is greater than the core, this is the maximum time that excess idle threads  will wait for new tasks before terminating.
+         * TimeUnit unit,                    时间单位  the time unit for the {@code keepAliveTime} argument
+         * BlockingQueue<Runnable> workQueue 阻塞队列   不管并发有多高,任意时刻,永远只有一个任务可以入队或者出队,也就意味着他是一个线程安全的队列
+         *                                             有界队列/无界队列
+         *  拒绝策略 :  (DiscardPolicy  DiscardOldestPolicy  CallerRunsPolicy  AbortPolicy)
+         *
+         *  线程池运行原理:
+         *  初始化 0个线程
+         *  任务进来 先创建核心线程处理任务
+         *  核心线程满载,还有任务进来,把任务放在阻塞队列中
+         *  阻塞队列放满了,还有任务进来,创建非核心线程处理任务
+         *  入过非核心线程满载,还有任务进来,启用拒绝策略
+         *
+         *
+         */
+        ArrayBlockingQueue waitQueue  = new ArrayBlockingQueue(5);
+        ExecutorService executorService = new ThreadPoolExecutor(10,15,60, TimeUnit.SECONDS,waitQueue);
         while (true) {
             Socket socket = serverSocket.accept();
             Thread task = new Thread(() -> {
